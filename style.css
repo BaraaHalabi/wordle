@@ -6,6 +6,10 @@
     padding: 0;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     background-color: #121213;
 }
@@ -15,6 +19,8 @@ body {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    height: 100%;
 }
 
 .title-container {
@@ -70,9 +76,27 @@ body {
 
     border: 2px solid #3a3a3c;
 
+    font-size: 2.5rem;
+
     display: flex;
     justify-content: center;
     align-items: center;
 
     margin: 2px;
+}
+
+
+.message-container {
+    height: 30px;
+}
+
+.message-container p {
+    background-color: #818384;
+
+    border-radius: 10px;
+
+    padding: 10px;
+
+    margin: 0;
+
 }
