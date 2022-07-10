@@ -1,3 +1,7 @@
+//https://rapidapi.com/sheharyar566/api/random-words5/
+//https://rapidapi.com/twinword/api/word-dictionary/
+
+
 const tileDisplay = document.querySelector('.tile-container');
 const keyboard = document.querySelector('.key-container');
 const messageDisplay = document.querySelector('.message-container');
@@ -82,7 +86,9 @@ let handleClick = (key) => {
     else addLetter(key);
 }
 
+//variable declarations
 let currentRow = 0, currentTile = 0;
+let isGameOver = false;
 
 const addLetter = (letter) => {
     if (currentTile >= 5 || currentRow >= 6) return;
@@ -103,10 +109,24 @@ const deleteLetter = () => {
 }
 
 const checkRow = () => {
-    if(currentTile === 5) {
+    if(currentTile == 5) {
         const guess = guessRows[currentRow].join('');
+        flipTile();
         if(guess == wordle) {
             showMessage('Magnificent!');
+            isGameOver = true;
+            return;
+        } else {
+            if(currentRow >= 5) {
+                isGameOver = true;
+                showMessage('Game Over!');
+                return;
+            }
+
+            if(currentRow < 5) {
+                currentRow ++;
+                currentTile = 0;
+            }
         }
     }
 }
@@ -118,4 +138,28 @@ const showMessage = (message) => {
     messageDisplay.appendChild(messageElement);
 
     setTimeout(() => {messageDisplay.removeChild(messageElement)}, 2000);
+}
+
+const flipTile = () => {
+    const rowTiles = document.querySelector('#guess-row-' + currentRow).childNodes;
+    for(let i = 0; i < rowTiles.length; i ++) {
+        // const tileLetter = guessRows[currentRow][i];
+
+        //optional
+        setTimeout(() => {
+            // rowTiles[i].classList.add('flip');
+
+            if(rowTiles[i].innerHTML == wordle[i]) {
+                rowTiles[i].classList.add('green');
+                document.querySelector('#' + rowTiles[i].innerHTML).classList.add('green');
+            } else if(wordle.includes(rowTiles[i].innerHTML)) {
+                rowTiles[i].classList.add('yellow');
+                document.querySelector('#' + rowTiles[i].innerHTML).classList.add('yellow');
+            } else {
+                rowTiles[i].classList.add('grey');
+                document.querySelector('#' + rowTiles[i].innerHTML).classList.add('grey');
+            }
+        }, 500 * i);
+        
+    }
 }

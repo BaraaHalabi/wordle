@@ -98,5 +98,19 @@ body {
     padding: 10px;
 
     margin: 0;
+}
 
+.grey {
+  background-color: #3a3a3c !important;
+  border: 2px solid #3a3a3c !important;
+}
+
+.green {
+  background-color: #538d4e !important;
+  border: 2px solid #538d4e !important;
+}
+
+.yellow {
+  background-color: #b59f3a !important;
+  border: 2px solid #b59f3a !important;
 }
