@@ -6,7 +6,7 @@ const tileDisplay = document.querySelector('.tile-container');
 const keyboard = document.querySelector('.key-container');
 const messageDisplay = document.querySelector('.message-container');
 
-const wordle = 'SMILE';
+let wordle;
 
 const keys = [
     'Q',
@@ -114,12 +114,31 @@ const checkRow = () => {
         flipTile();
         if(guess == wordle) {
             showMessage('Magnificent!');
+            //get a new wordle
+            setTimeout(() => {
+                getNewWord().then((res) => {
+                    wordle = res[0].toUpperCase();
+                    clearBoard();
+                    showMessage('New Wordle Loaded!');
+                    console.log(wordle);
+                });
+            }, 3000);
+            
             isGameOver = true;
             return;
         } else {
             if(currentRow >= 5) {
                 isGameOver = true;
                 showMessage('Game Over!');
+                //get a new wordle
+                setTimeout(() => {
+                    getNewWord().then((res) => {
+                        wordle = res[0].toUpperCase();
+                        clearBoard();
+                        showMessage('New Wordle Loaded!');
+                        console.log(wordle);
+                    });
+                }, 3000);
                 return;
             }
 
@@ -163,3 +182,47 @@ const flipTile = () => {
         
     }
 }
+
+const clearBoard = () => {
+    //clearing tiles
+    for(let i = 0; i < guessRows.length; i ++) {
+        for(let j = 0; j < guessRows[i].length; j ++) {
+            const tile = document.getElementById('guess-row-' + i + '-tile-' + j);
+            tile.innerHTML = '';
+            tile.className = 'tile';
+            guessRows[i][j] = '';
+        }
+    }
+
+    //clearing key classes
+    for(let i = 0; i < keys.length; i ++)
+        document.getElementById(keys[i]).className = '';
+}
+
+const getNewWord = () => {
+    return new Promise((res, rej) => {
+        try {
+            const xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.open("GET", "https://random-words5.p.rapidapi.com/getMultipleRandom?count=1&wordLength=5");
+            xhr.setRequestHeader("X-RapidAPI-Key", "77772f2e00msh4368e34f8ce54b9p179308jsna03ff6ab63c9");
+            xhr.setRequestHeader("X-RapidAPI-Host", "random-words5.p.rapidapi.com");
+
+            xhr.send(null);
+
+            xhr.onload = () => {
+                res(JSON.parse(xhr.response));
+            }
+        } catch(err) {
+            rej(err);
+        }
+    });
+};
+
+
+getNewWord().then((res) => {
+    wordle = res[0].toUpperCase();
+    showMessage('New Wordle Loaded!');
+    console.log(wordle);
+});
